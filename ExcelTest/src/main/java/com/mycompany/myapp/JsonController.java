@@ -36,17 +36,17 @@ public class JsonController {
 	    Map<String, Object> jsonSubObject = null;
 	    ArrayList<Map<String, Object>> jsonList = new ArrayList<Map<String, Object>>();
 	         
-	    //1¹øÂ° µ¥ÀÌÅÍ
+	    //1ë²ˆì§¸ ë°ì´í„°
 	    jsonSubObject = new HashMap<String, Object>();
 	    jsonSubObject.put("idx", 1);
-	    jsonSubObject.put("title", "Á¦¸ñÀÔ´Ï´Ù");
+	    jsonSubObject.put("title", "ì œëª©ì…ë‹ˆë‹¤");
 	    jsonSubObject.put("create_date", new Date());
 	    jsonList.add(jsonSubObject);
 	    
-	    //2¹øÂ° µ¥ÀÌÅÍ
+	    //2ë²ˆì§¸ ë°ì´í„°
 	    jsonSubObject = new HashMap<String, Object>();
 	    jsonSubObject.put("idx", 2);
-	    jsonSubObject.put("title", "µÎ¹øÂ°Á¦¸ñÀÔ´Ï´Ù");
+	    jsonSubObject.put("title", "ë‘ë²ˆì§¸ì œëª©ì…ë‹ˆë‹¤");
 	    jsonSubObject.put("create_date", new Date());
 	    jsonList.add(jsonSubObject);
 	         
@@ -55,9 +55,9 @@ public class JsonController {
 	    jsonObject.put("result_list", jsonList);
 	    
 	    List<Product> productList = new ArrayList<Product>();
-	    Product product1 = new Product(1, "Hot Chicken", "C-1", "ÇÖÄ¡Å²");
-	    Product product2 = new Product(1, "Cheese Chicken", "C-2", "Ä¡Áî °¡·ç Ä¡Å²");
-	    Product product3 = new Product(1, "Honey Chicken", "C-3", "Çã´Ï ¹öÅÍ Ä¡Å²");
+	    Product product1 = new Product(1, "Hot Chicken", "C-1", "í•«ì¹˜í‚¨");
+	    Product product2 = new Product(1, "Cheese Chicken", "C-2", "ì¹˜ì¦ˆ ê°€ë£¨ ì¹˜í‚¨");
+	    Product product3 = new Product(1, "Honey Chicken", "C-3", "í—ˆë‹ˆ ë²„í„° ì¹˜í‚¨");
 	    productList.add(product1);
 	    productList.add(product2);
 	    productList.add(product3);
@@ -76,7 +76,7 @@ public class JsonController {
 	}
 
 	/**
-	 * VO¹æ½ÄÀ» ÀÌ¿ëÇÑ JSON API ÄÁÆ®·Ñ·¯
+	 * VOë°©ì‹ì„ ì´ìš©í•œ JSON API ì»¨íŠ¸ë¡¤ëŸ¬
 	 * @return
 	 */
 	@RequestMapping(value="/getJsonByVO")
@@ -86,21 +86,21 @@ public class JsonController {
 	    ListVo vo = null;
 	    ObjectVo objectVO = new ObjectVo();
 	    
-	    //1¹øÂ° µ¥ÀÌÅÍ
+	    //1ë²ˆì§¸ ë°ì´í„°
 	    vo = new ListVo();
 	    vo.setIdx(1);
-	    vo.setTitle("VO¹æ½ÄÀÇ Á¦¸ñÀÔ´Ï´Ù");
+	    vo.setTitle("VOë°©ì‹ì˜ ì œëª©ì…ë‹ˆë‹¤");
 	    vo.setCreate_date(cal.get(Calendar.YEAR)+"-"+(cal.get(Calendar.MONTH) + 1)+"-"+cal.get(Calendar.DAY_OF_MONTH));
 	    list.add(vo);
 	    
-	    //2¹øÂ° µ¥ÀÌÅÍ
+	    //2ë²ˆì§¸ ë°ì´í„°
 	    vo = new ListVo();
 	    vo.setIdx(2);
-	    vo.setTitle("VO¹æ½ÄÀÇ Á¦¸ñÀÔ´Ï´Ù2");
+	    vo.setTitle("VOë°©ì‹ì˜ ì œëª©ì…ë‹ˆë‹¤2");
 	    vo.setCreate_date(cal.get(Calendar.YEAR)+"-"+(cal.get(Calendar.MONTH) + 1)+"-"+cal.get(Calendar.DAY_OF_MONTH));
 	    list.add(vo);
 	         
-	    //ÀÌ·¸°Ô ¼ø¼­´ë·Î Ãâ·ÂµÊ
+	    //ì´ë ‡ê²Œ ìˆœì„œëŒ€ë¡œ ì¶œë ¥ë¨
 	    objectVO.setSuccess(true);
 	    objectVO.setTotal_count(10);	    
 	    objectVO.setList(list);
@@ -115,21 +115,21 @@ public class JsonController {
 	@ResponseBody
 	public Object getBookInfo(@RequestParam Map<String,Object> map) {
 		System.out.println("1");
-	    String searchCd = (String) map.get("searchCd"); //°Ë»öÄÚµå
-	    //½ÇÁ¦·Î ÇØ´ç ºÎºĞÀº ¼­ºñ½º¿¡¼­ Ã³¸® ÇØ¾ß ÇÏÁö¸¸ ±×³É Controller¿¡¼­ Ã³¸®
-	    //°Ë»öÄÚµå¸¦ Á¶°ÇÀ¸·Î °ªÀ» °¡Á® ¿Í¾ß ÇÏ´Âµ¥ ¼³¸íÀ» À§ÇØ ÀÓÀÇÀûÀ¸·Î °ªÀ» ¼ÂÆÃ
+	    String searchCd = (String) map.get("searchCd"); //ê²€ìƒ‰ì½”ë“œ
+	    //ì‹¤ì œë¡œ í•´ë‹¹ ë¶€ë¶„ì€ ì„œë¹„ìŠ¤ì—ì„œ ì²˜ë¦¬ í•´ì•¼ í•˜ì§€ë§Œ ê·¸ëƒ¥ Controllerì—ì„œ ì²˜ë¦¬
+	    //ê²€ìƒ‰ì½”ë“œë¥¼ ì¡°ê±´ìœ¼ë¡œ ê°’ì„ ê°€ì ¸ ì™€ì•¼ í•˜ëŠ”ë° ì„¤ëª…ì„ ìœ„í•´ ì„ì˜ì ìœ¼ë¡œ ê°’ì„ ì…‹íŒ…
 	 
 	    List<Book> bookList = new ArrayList<Book>();
 	    Book book = new Book();
 	    System.out.println("2");	     
-	    book.setName("È«±æµ¿Àü");
+	    book.setName("í™ê¸¸ë™ì „");
 	    book.setPrice(100);
 	     
 	    bookList.add(book);
 	     
 	    book = new Book();
 	    System.out.println("3");
-	    book.setName("·¹¹ÌÁ¦¶óºí");
+	    book.setName("ë ˆë¯¸ì œë¼ë¸”");
 	    book.setPrice(300);
 	     
 	    bookList.add(book);
@@ -137,7 +137,7 @@ public class JsonController {
 	     
 	    Map<String, Object> retVal = new HashMap<String, Object>();
 	    System.out.println("5");
-	    retVal.put("bookList", bookList); //bookList¶õ Å°·Î bookListÀÇ °ªÀ» ³Ö¾îÁİ´Ï´Ù. (À¥¿¡¼­ bookListÅ°·Î ÃßÃâ
+	    retVal.put("bookList", bookList); //bookListë€ í‚¤ë¡œ bookListì˜ ê°’ì„ ë„£ì–´ì¤ë‹ˆë‹¤. (ì›¹ì—ì„œ bookListí‚¤ë¡œ ì¶”ì¶œ
 	    System.out.println("6");
 	    retVal.put("code", "OK");
 	    System.out.println("7");
@@ -147,17 +147,17 @@ public class JsonController {
 	    Map<String, Object> jsonObject = new HashMap<String, Object>();
 	    Map<String, Object> jsonSubObject = null;
 	    ArrayList<Map<String, Object>> jsonList = new ArrayList<Map<String, Object>>();
-	  //1¹øÂ° µ¥ÀÌÅÍ
+	  //1ë²ˆì§¸ ë°ì´í„°
 	    jsonSubObject = new HashMap<String, Object>();
 	    jsonSubObject.put("idx", 1);
-	    jsonSubObject.put("title", "Á¦¸ñÀÔ´Ï´Ù");
+	    jsonSubObject.put("title", "ì œëª©ì…ë‹ˆë‹¤");
 	    jsonSubObject.put("create_date", new Date());
 	    jsonList.add(jsonSubObject);
 	    
-	    //2¹øÂ° µ¥ÀÌÅÍ
+	    //2ë²ˆì§¸ ë°ì´í„°
 	    jsonSubObject = new HashMap<String, Object>();
 	    jsonSubObject.put("idx", 2);
-	    jsonSubObject.put("title", "µÎ¹øÂ°Á¦¸ñÀÔ´Ï´Ù");
+	    jsonSubObject.put("title", "ë‘ë²ˆì§¸ì œëª©ì…ë‹ˆë‹¤");
 	    jsonSubObject.put("create_date", new Date());
 	    jsonList.add(jsonSubObject);
 	         
@@ -184,7 +184,7 @@ public class JsonController {
 		
 		jsonSubObject = new HashMap<String, Object>();
 	    jsonSubObject.put("idx", 5);
-	    jsonSubObject.put("title", "Á¦¸ñÀÔ´Ï´Ù");
+	    jsonSubObject.put("title", "ì œëª©ì…ë‹ˆë‹¤");
 	    arr = new int[3];
 	    arr[0] =1;
 	    arr[1] =2;
@@ -194,7 +194,7 @@ public class JsonController {
 	    
 	    jsonSubObject = new HashMap<String, Object>();
 	    jsonSubObject.put("idx", 2);
-	    jsonSubObject.put("title", "µÎ¹øÂ°Á¦¸ñÀÔ´Ï´Ù");
+	    jsonSubObject.put("title", "ë‘ë²ˆì§¸ì œëª©ì…ë‹ˆë‹¤");
 	    arr = new int[3];
 	    arr[0] = 4;
 	    arr[1] = 5;
@@ -221,20 +221,20 @@ public class JsonController {
 	    subChild = new ArrayList<Object>();
 	    subChild.add("1");
 //	    subChild.add("<input type='text' value='1' style='color:red;' class='form-control' >");
-	    subChild.add("»ç¿ø");
+	    subChild.add("ì‚¬ì›");
 	    subChild.add("<input type='text' value='test1' style='color:red;' class='form-control' >");
 	    subChild.add("<select class='form-control'>"
 	    			+ "	<option>1</option>"
 	    			+ " <option>2</option>"
 	    			+"</select>");
 	    subChild.add("<div id='dummy'>"
-	    			+ "	<font color='red'>Á¡¼ö¿À·ù<br>"
-	    			+ "	<input type='button' value='Àçµî·Ï' class='btn btn-default' id='byButton' onclick='add_item(this)'></font><br>"
+	    			+ "	<font color='red'>ì ìˆ˜ì˜¤ë¥˜<br>"
+	    			+ "	<input type='button' value='ì¬ë“±ë¡' class='btn btn-default' id='byButton' onclick='add_item(this)'></font><br>"
 	    			+ "</div>"
 	    			+ "<div id='pre_set' style='display:none'>"
-	    			+ "	<input type='text' name='¹»·ÎÇØ¾ßµÇÁö' id='¹»·ÎÇØ¾ßµÇÁö' style='width:100px'>"
-	    			+ " <input type='button' value='È®ÀÎ' class='btn btn-default btn-sm' onclick=''>"
-	    			+ "	<input type='button' value='Ãë¼Ò' class='btn btn-default btn-sm' onclick='remove_item(this)'>"
+	    			+ "	<input type='text' name='ë­˜ë¡œí•´ì•¼ë˜ì§€' id='ë­˜ë¡œí•´ì•¼ë˜ì§€' style='width:100px'>"
+	    			+ " <input type='button' value='í™•ì¸' class='btn btn-default btn-sm' onclick=''>"
+	    			+ "	<input type='button' value='ì·¨ì†Œ' class='btn btn-default btn-sm' onclick='remove_item(this)'>"
 	    			+ "</div>"
 	    			+ "<div id='field'></div>");
 	    subChild.add("<div class='checkbox'>"
@@ -248,36 +248,36 @@ public class JsonController {
 	    
 	    subChild = new ArrayList<Object>();
 	    subChild.add("2");
-	    subChild.add("´ë¸®");
+	    subChild.add("ëŒ€ë¦¬");
 //	    subChild.add("<input type='text' class='form-control' value='2' style='color:blue;'>");
 	    subChild.add("<input type='text' class='form-control' value='test2' style='color:blue;'>");
 	    subChild.add("<select class='form-control'><option>1</option><option>2</option></select>");
-	    subChild.add("<div id='dummy'><font color='red'>Á¡¼ö¿À·ù<br><input type='button' value='Àçµî·Ï' onclick='add_item()'></div></font><br><div id='pre_set' style='display:none'>"+
-	    			"<input type='text' name='' value='' style='width:200px'> <input type='button' value='»èÁ¦' onclick='remove_item(this)'></div><div id='field'></div>");
+	    subChild.add("<div id='dummy'><font color='red'>ì ìˆ˜ì˜¤ë¥˜<br><input type='button' value='ì¬ë“±ë¡' onclick='add_item()'></div></font><br><div id='pre_set' style='display:none'>"+
+	    			"<input type='text' name='' value='' style='width:200px'> <input type='button' value='ì‚­ì œ' onclick='remove_item(this)'></div><div id='field'></div>");
 	    subChild.add("<div class='checkbox'><label><input type='checkbox' name='vehicle' value='Bike'> I have a bike<br> <input type='checkbox' name='vehicle' value='Car' checked> I have a car</label></div><br>");
 	    
 	    mChildList.add(subChild);
 	    
 	    subChild = new ArrayList<Object>();
 	    subChild.add("3");
-	    subChild.add("°úÀå");
+	    subChild.add("ê³¼ì¥");
 //	    subChild.add("<input type='text' class='form-control' value='3' style='color:green;'>");
 	    subChild.add("<input type='text' class='form-control' value='test3' style='color:green;'>");
 	    subChild.add("<select class='form-control'><option>1</option><option>2</option></select>");
-	    subChild.add("<font color='red'>Á¡¼ö¿À·ù<br><input type='button' value='Ãß°¡' onclick='add_item()'></font>");
+	    subChild.add("<font color='red'>ì ìˆ˜ì˜¤ë¥˜<br><input type='button' value='ì¶”ê°€' onclick='add_item()'></font>");
 	    subChild.add("<div class='checkbox'><label><input type='checkbox' name='vehicle' value='Bike'> I have a bike<br> <input type='checkbox' name='vehicle' value='Car' checked> I have a car</label></div><br>");
 	    
-	    mChildList.add(subChild); // ¸¶Áö¸· °ª 
+	    mChildList.add(subChild); // ë§ˆì§€ë§‰ ê°’ 
 
 	    subChild = new ArrayList<Object>();
 	    subChild.add("4");
-	    subChild.add("ºÎÀå");
+	    subChild.add("ë¶€ì¥");
 //	    subChild.add("<input type='text' class='form-control' value='4' style='color:yellow;'>");
 	    subChild.add("<input type='text' class='form-control' value='test2' style='color:yellow;'>");
 	    subChild.add("<select class='form-control'><option>1</option><option>2</option></select>");
-	    subChild.add("<font color='red'>Á¡¼ö¿À·ù<br><input type='button' value='Ãß°¡' onclick='add_item()'></font>");
+	    subChild.add("<font color='red'>ì ìˆ˜ì˜¤ë¥˜<br><input type='button' value='ì¶”ê°€' onclick='add_item()'></font>");
 	    subChild.add("<div class='checkbox'><label><input type='checkbox' name='vehicle' value='Bike'> I have a bike<br> <input type='checkbox' name='vehicle' value='Car' checked> I have a car</label></div><br>");
-	    mChildList.add(subChild); // ¸¶Áö¸· °ª
+	    mChildList.add(subChild); // ë§ˆì§€ë§‰ ê°’
 	    
 	    mGroupList.add(mChildList);
 	    
@@ -295,7 +295,7 @@ public class JsonController {
 	    String originFileName = mpf.getOriginalFilename();
 	 
 	 
-	    // ... »ı·«
+	    // ... ìƒëµ
 	 
 	     
 	    return "index";

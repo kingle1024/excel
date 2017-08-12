@@ -5,4 +5,10 @@
 	
 	<!-- Root Context: defines shared resources visible to all other web components -->
 <bean id="jacksonMessageConverter" class="org.springframework.http.converter.json.MappingJacksonHttpMessageConverter" />
+
+ <!-- properties -->
+    <bean class="org.springframework.beans.factory.config.PropertyPlaceholderConfigurer">
+        <property name="fileEncoding" value="UTF-8" />
+    </bean>
+    
 </beans>

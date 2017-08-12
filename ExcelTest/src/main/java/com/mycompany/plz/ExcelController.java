@@ -20,9 +20,9 @@ public class ExcelController {
 	    @RequestMapping(value = "/excelUploadAjax", method = RequestMethod.POST)
 	    public ModelAndView excelUploadAjax(MultipartHttpServletRequest request)  throws Exception{
 	        MultipartFile excelFile =request.getFile("excelFile");
-	        System.out.println("¿¢¼¿ ÆÄÀÏ ¾÷·Îµå ÄÁÆ®·Ñ·¯");
+	        System.out.println("ì—‘ì…€ íŒŒì¼ ì—…ë¡œë“œ ì»¨íŠ¸ë¡¤ëŸ¬");
 	        if(excelFile==null || excelFile.isEmpty()){
-	            throw new RuntimeException("¿¢¼¿ÆÄÀÏÀ» ¼±ÅÃ ÇØ ÁÖ¼¼¿ä.");
+	            throw new RuntimeException("ì—‘ì…€íŒŒì¼ì„ ì„ íƒ í•´ ì£¼ì„¸ìš”.");
 	        }
 	        
 	        File destFile = new File("C:\\"+excelFile.getOriginalFilename());
@@ -32,7 +32,7 @@ public class ExcelController {
 	            throw new RuntimeException(e.getMessage(),e);
 	        }
 	        
-	        //Service ´Ü¿¡¼­ °¡Á®¿Â ÄÚµå 
+	        //Service ë‹¨ì—ì„œ ê°€ì ¸ì˜¨ ì½”ë“œ 
 	        ExcelReadOption excelReadOption = new ExcelReadOption();
 	        excelReadOption.setFilePath(destFile.getAbsolutePath());
 	        excelReadOption.setOutputColumns("A","B","C","D","E","F");
@@ -50,7 +50,7 @@ public class ExcelController {
 	            System.out.println(article.get("F"));
 	        }
 	        
-	        //userService.excelUpload(destFile); //¼­ºñ½º ºÎºĞÀ» »èÁ¦ÇÑ´Ù.
+	        //userService.excelUpload(destFile); //ì„œë¹„ìŠ¤ ë¶€ë¶„ì„ ì‚­ì œí•œë‹¤.
 	        
 	        //FileUtils.forceDelete(destFile.getAbsolutePath());
 	        

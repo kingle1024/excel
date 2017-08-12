@@ -10,21 +10,20 @@ import org.apache.poi.xssf.usermodel.XSSFWorkbook;
 public class FileType {
 	 /**
      * 
-     * ¿¢¼¿ÆÄÀÏÀ» ÀÐ¾î¼­ Workbook °´Ã¼¿¡ ¸®ÅÏÇÑ´Ù.
-     * XLS¿Í XLSX È®ÀåÀÚ¸¦ ºñ±³ÇÑ´Ù.
+     * ì—‘ì…€íŒŒì¼ì„ ì½ì–´ì„œ Workbook ê°ì²´ì— ë¦¬í„´í•œë‹¤.
+     * XLSì™€ XLSX í™•ìž¥ìžë¥¼ ë¹„êµí•œë‹¤.
      * 
      * @param filePath
      * @return
      * 
      */
     public static Workbook getWorkbook(String filePath) {
-        
         /*
-         * FileInputStreamÀº ÆÄÀÏÀÇ °æ·Î¿¡ ÀÖ´Â ÆÄÀÏÀ»
-         * ÀÐ¾î¼­ Byte·Î °¡Á®¿Â´Ù.
+         * FileInputStreamì€ íŒŒì¼ì˜ ê²½ë¡œì— ìžˆëŠ” íŒŒì¼ì„
+         * ì½ì–´ì„œ Byteë¡œ ê°€ì ¸ì˜¨ë‹¤.
          * 
-         * ÆÄÀÏÀÌ Á¸ÀçÇÏÁö ¾Ê´Â´Ù¸éÀº
-         * RuntimeExceptionÀÌ ¹ß»ýµÈ´Ù.
+         * íŒŒì¼ì´ ì¡´ìž¬í•˜ì§€ ì•ŠëŠ”ë‹¤ë©´ì€
+         * RuntimeExceptionì´ ë°œìƒëœë‹¤.
          */
         FileInputStream fis = null;
         try {
@@ -36,8 +35,8 @@ public class FileType {
         Workbook wb = null;
         
         /*
-         * ÆÄÀÏÀÇ È®ÀåÀÚ¸¦ Ã¼Å©ÇØ¼­ .XLS ¶ó¸é HSSFWorkbook¿¡
-         * .XLSX¶ó¸é XSSFWorkbook¿¡ °¢°¢ ÃÊ±âÈ­ ÇÑ´Ù.
+         * íŒŒì¼ì˜ í™•ìž¥ìžë¥¼ ì²´í¬í•´ì„œ .XLS ë¼ë©´ HSSFWorkbookì—
+         * .XLSXë¼ë©´ XSSFWorkbookì— ê°ê° ì´ˆê¸°í™” í•œë‹¤.
          */
         if(filePath.toUpperCase().endsWith(".XLS")) {
             try {

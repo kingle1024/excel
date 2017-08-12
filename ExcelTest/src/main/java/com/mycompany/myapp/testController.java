@@ -2,9 +2,19 @@ package com.mycompany.myapp;
 
 import java.io.FileInputStream;
 import java.io.IOException;
+import java.lang.reflect.Array;
+import java.text.SimpleDateFormat;
 import java.util.ArrayList;
+import java.util.Date;
+import java.util.Iterator;
 import java.util.List;
 
+import org.apache.poi.hssf.usermodel.HSSFDateUtil;
+import org.apache.poi.ss.usermodel.Cell;
+import org.apache.poi.ss.usermodel.DateUtil;
+import org.apache.poi.ss.usermodel.FormulaEvaluator;
+import org.apache.poi.ss.usermodel.Row;
+import org.apache.poi.ss.util.CellRangeAddress;
 import org.apache.poi.xssf.usermodel.XSSFCell;
 import org.apache.poi.xssf.usermodel.XSSFRow;
 import org.apache.poi.xssf.usermodel.XSSFSheet;
@@ -13,62 +23,163 @@ import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestMethod;
+import org.springframework.web.servlet.ModelAndView;
 // http://hellogk.tistory.com/14
 // http://daydreamer-92.tistory.com/42
 @Controller
 public class testController {
 	@RequestMapping("/test")
 	public String test(Model model) throws IOException{
-		FileInputStream fis=new FileInputStream("C:\\Spring\\qq.xlsx");
+		FileInputStream fis=new FileInputStream("C:\\Spring\\workBook.xlsx");
 		XSSFWorkbook workbook=new XSSFWorkbook(fis);
 		int rowindex=0;
 		int columnindex=0;
 		List listA = new ArrayList();
-		//½ÃÆ® ¼ö (Ã¹¹øÂ°¿¡¸¸ Á¸ÀçÇÏ¹Ç·Î 0À» ÁØ´Ù)
-		//¸¸¾à °¢ ½ÃÆ®¸¦ ÀĞ±âÀ§ÇØ¼­´Â FOR¹®À» ÇÑ¹ø´õ µ¹·ÁÁØ´Ù
+		ArrayList<String> headerList = new ArrayList<String>();
+		ArrayList<String> array = new ArrayList<String>();
+		
+		ArrayList<ArrayList<String>> mGroupList = null;
+	    ArrayList<String> mChildList = null;
+	    mGroupList = new ArrayList<ArrayList<String>>();
+        mChildList = new ArrayList<String>();
+
+		//ì‹œíŠ¸ ìˆ˜ (ì²«ë²ˆì§¸ì—ë§Œ ì¡´ì¬í•˜ë¯€ë¡œ 0ì„ ì¤€ë‹¤)
+		//ë§Œì•½ ê° ì‹œíŠ¸ë¥¼ ì½ê¸°ìœ„í•´ì„œëŠ” FORë¬¸ì„ í•œë²ˆë” ëŒë ¤ì¤€ë‹¤
 		XSSFSheet sheet=workbook.getSheetAt(0);
-		//ÇàÀÇ ¼ö
+		//í–‰ì˜ ìˆ˜
 		int rows=sheet.getPhysicalNumberOfRows();
-		for(rowindex=1;rowindex<rows;rowindex++){ 
-		    //ÇàÀ»ÀĞ´Â´Ù
-			System.out.println("·Î¿ì ¼ö"+rows);
-		    XSSFRow row=sheet.getRow(rowindex);
-		    if(row !=null){
-		        //¼¿ÀÇ ¼ö
+		int startRowindex = 10;
+		XSSFRow row;
+		
+		/*
+		 * 
+		 */
+		
+		////////////////////////////////////////////////////////////////////////
+		/*
+		 * get header
+		 * 
+		 */
+		for(rowindex=8; rowindex<10; rowindex++){ 
+	    row=sheet.getRow(rowindex);
+		    if(row !=null){ 
+		        //ì…€ì˜ ìˆ˜
 		        int cells=row.getPhysicalNumberOfCells();
-		        System.out.println("¼¿¼ö:"+cells);
-		        for(columnindex=0;columnindex<=cells;columnindex++){ // 16
-		        	if(rowindex==2 && columnindex==0){
-		        		listA.add("</tr><tr>");
-		        	}
-		        	if(rowindex==3 && columnindex==0){
-		        		listA.add("</tr><tr>");
-		        	}
-		            //¼¿°ªÀ» ÀĞ´Â´Ù
+		        for(columnindex=0; columnindex<cells; columnindex++){
+		            //ì…€ê°’ì„ ì½ëŠ”ë‹¤
 		            XSSFCell cell=row.getCell(columnindex);
 		            String value="";
-		            
-		            //¼¿ÀÌ ºó°ªÀÏ°æ¿ì¸¦ À§ÇÑ ³ÎÃ¼Å©
+		            mChildList = new ArrayList<String>();
+		            //ì…€ì´ ë¹ˆê°’ì¼ê²½ìš°ë¥¼ ìœ„í•œ ë„ì²´í¬
 		            if(cell==null){
 		                continue;
 		            }else{
-		                //Å¸ÀÔº°·Î ³»¿ë ÀĞ±â
+		                //íƒ€ì…ë³„ë¡œ ë‚´ìš© ì½ê¸°
 		                switch (cell.getCellType()){
-		                case XSSFCell.CELL_TYPE_FORMULA:
-		                    value=cell.getCellFormula();
-		                    break;
-		                case XSSFCell.CELL_TYPE_NUMERIC:
-		                    value=cell.getNumericCellValue()+"";
-		                    break;
-		                case XSSFCell.CELL_TYPE_STRING:
-		                    value=cell.getStringCellValue()+"";
-		                    break;
-		                case XSSFCell.CELL_TYPE_BLANK:
-		                    value=cell.getBooleanCellValue()+"";
-		                    break;
-		                case XSSFCell.CELL_TYPE_ERROR:
-		                    value=cell.getErrorCellValue()+"";
-		                    break;
+			                case XSSFCell.CELL_TYPE_FORMULA:{
+			                	SimpleDateFormat fommatter = new SimpleDateFormat("HH:mm");
+			                	value = fommatter.format(cell.getDateCellValue())+"";
+			                    break;
+			                }
+			                case XSSFCell.CELL_TYPE_NUMERIC:{
+			                	if( HSSFDateUtil.isCellDateFormatted(cell)){ // ì‹œê°„ í˜•ì‹
+		                			SimpleDateFormat fommatter = new SimpleDateFormat("HH:mm");
+			                		value = fommatter.format(cell.getDateCellValue())+"";
+			                	} else {
+			                		double ddata = cell.getNumericCellValue();
+			                		if ( HSSFDateUtil.isValidExcelDate(ddata) ){ // ë‚ ì§œ í˜•ì‹
+			                		SimpleDateFormat fommatter = new SimpleDateFormat("yyyy-MM-dd");
+			                		value = fommatter.format(cell.getDateCellValue())+""; 
+				                	} else {
+				                		value = String.valueOf(ddata);
+				                	}
+			                	}
+			                    break;
+			                }
+			                case XSSFCell.CELL_TYPE_STRING:
+			                    value=cell.getStringCellValue()+"";
+			                    
+			                    array.add(value);
+			                    break;
+			                case XSSFCell.CELL_TYPE_BLANK:
+	//		                    value=cell.getBooleanCellValue()+"";
+			                    value=cell.toString()+"null";
+			                    break;
+			                case XSSFCell.CELL_TYPE_ERROR:
+			                    value=cell.getErrorCellValue()+"#5ë²ˆ#";
+			                    break;
+		                }
+		                mChildList.add(value);
+		            }
+//		            if(value.equals("data")){
+//		            	rows= columnindex;
+//		            	cells = 0;
+//		            	continue;
+//		            }
+		            if(value.equals("")){
+		            	value = (String) listA.get(listA.size()-1);
+		            }
+		            headerList.add(value);
+		        }
+		        headerList.add("</td><tr>");
+		    }
+		    mGroupList.add(mChildList);
+		}
+		
+		////////////////////////////////////////////////////////////////////////
+		/*
+		 * nameê°’ ê°€ì ¸ì˜¤ê¸°
+		 * 
+		 */
+			rowindex=7;
+		    row=sheet.getRow(rowindex);
+//		    row.getRowStyle().setHidden(false); // ìˆ¨ê¸´ ì…€ì„ ê°€ì ¸ì˜¬ì§€ ë§ì§€ ì„¤ì •í•˜ëŠ” ê²ƒ ê°™ìŒ
+		    
+		    if(row !=null){ 
+		        //ì…€ì˜ ìˆ˜
+		        int cells=row.getPhysicalNumberOfCells();
+		        for(columnindex=0; columnindex<cells; columnindex++){
+		            //ì…€ê°’ì„ ì½ëŠ”ë‹¤
+		            XSSFCell cell=row.getCell(columnindex);
+		            String value="";
+		            System.out.println(cell);
+		            //ì…€ì´ ë¹ˆê°’ì¼ê²½ìš°ë¥¼ ìœ„í•œ ë„ì²´í¬
+		            if(cell==null){
+		                continue;
+		            }else{
+		                //íƒ€ì…ë³„ë¡œ ë‚´ìš© ì½ê¸°
+		                switch (cell.getCellType()){
+			                case XSSFCell.CELL_TYPE_FORMULA:{
+			                	SimpleDateFormat fommatter = new SimpleDateFormat("HH:mm");
+			                	value = fommatter.format(cell.getDateCellValue())+"";
+			                    break;
+			                }
+			                case XSSFCell.CELL_TYPE_NUMERIC:{
+			                	if( HSSFDateUtil.isCellDateFormatted(cell)){ // ì‹œê°„ í˜•ì‹
+		                			SimpleDateFormat fommatter = new SimpleDateFormat("HH:mm");
+			                		value = fommatter.format(cell.getDateCellValue())+"";
+			                	} else {
+			                		double ddata = cell.getNumericCellValue();
+			                		if ( HSSFDateUtil.isValidExcelDate(ddata) ){ // ë‚ ì§œ í˜•ì‹
+			                		SimpleDateFormat fommatter = new SimpleDateFormat("yyyy-MM-dd");
+			                		value = fommatter.format(cell.getDateCellValue())+""; 
+				                	} else {
+				                		value = String.valueOf(ddata);
+				                	}
+			                	}
+			                    break;
+			                }
+			                case XSSFCell.CELL_TYPE_STRING:
+			                    value=cell.getStringCellValue()+"";
+			                    array.add(value);
+			                    break;
+			                case XSSFCell.CELL_TYPE_BLANK:
+//			                    value=cell.getBooleanCellValue()+"";
+			                    value=cell.toString()+"null";
+			                    break;
+			                case XSSFCell.CELL_TYPE_ERROR:
+			                    value=cell.getErrorCellValue()+"#5ë²ˆ#";
+			                    break;
 		                }
 		            }
 		            if(value.equals("data")){
@@ -76,23 +187,162 @@ public class testController {
 		            	cells = 0;
 		            	continue;
 		            }
-		            System.out.println("°¢ ¼¿ ³»¿ë :"+value);
 		            if(value.equals("")){
 		            	value = (String) listA.get(listA.size()-1);
 		            }
-		            listA.add(value);
 		        }
+		    }
+		for(int i=0; i<array.size(); i++){
+			System.out.print(array.get(i)+" ");
+		}
+		
+		///////////////////////////////////////////////////////////////////////
+		
+		for(rowindex=startRowindex; rowindex<rows;rowindex++){ 
+		    //í–‰ì„ì½ëŠ”ë‹¤
+			System.out.println("ë¡œìš° ìˆ˜"+rows);
+			row=sheet.getRow(rowindex);
+//		    row.getRowStyle().setHidden(false); // ìˆ¨ê¸´ ì…€ì„ ê°€ì ¸ì˜¬ì§€ ë§ì§€ ì„¤ì •í•˜ëŠ” ê²ƒ ê°™ìŒ
+		    
+		    if(row !=null){ 
+		        //ì…€ì˜ ìˆ˜
+		        int cells=row.getPhysicalNumberOfCells();
+		        for(columnindex=0; columnindex<cells; columnindex++){
+		            //ì…€ê°’ì„ ì½ëŠ”ë‹¤
+		            XSSFCell cell=row.getCell(columnindex);
+		            String value="";
+		            //ì…€ì´ ë¹ˆê°’ì¼ê²½ìš°ë¥¼ ìœ„í•œ ë„ì²´í¬
+		            if(cell==null){
+		                continue;
+		            }else{
+		                //íƒ€ì…ë³„ë¡œ ë‚´ìš© ì½ê¸°
+		                switch (cell.getCellType()){
+			                case XSSFCell.CELL_TYPE_FORMULA:{
+			                	SimpleDateFormat fommatter = new SimpleDateFormat("HH:mm");
+			                	value = fommatter.format(cell.getDateCellValue())+"";
+			                    break;
+			                }
+			                case XSSFCell.CELL_TYPE_NUMERIC:{
+			                	if( HSSFDateUtil.isCellDateFormatted(cell)){ // ì‹œê°„ í˜•ì‹
+		                			SimpleDateFormat fommatter = new SimpleDateFormat("HH:mm");
+			                		value = fommatter.format(cell.getDateCellValue())+"";
+			                	} else {
+			                		double ddata = cell.getNumericCellValue();
+			                		if ( HSSFDateUtil.isValidExcelDate(ddata) ){ // ë‚ ì§œ í˜•ì‹
+			                		SimpleDateFormat fommatter = new SimpleDateFormat("yyyy-MM-dd");
+			                		value = fommatter.format(cell.getDateCellValue())+""; 
+				                	} else {
+				                		value = String.valueOf(ddata);
+				                	}
+			                	}
+			                    break;
+			                }
+			                case XSSFCell.CELL_TYPE_STRING:
+			                    value=cell.getStringCellValue()+"";
+			                    break;
+			                case XSSFCell.CELL_TYPE_BLANK:
+//			                    value=cell.getBooleanCellValue()+"";
+			                    value=cell.toString()+"&nbsp;";
+			                    break;
+			                case XSSFCell.CELL_TYPE_ERROR:
+			                    value=cell.getErrorCellValue()+"#5ë²ˆ#";
+			                    break;
+		                }
+		            }
+		            if(value.equals("data")){
+		            	rows= columnindex;
+		            	cells = 0;
+		            	continue;
+		            }
+		            if(value.equals("")){
+		            	value = (String) listA.get(listA.size()-1);
+		            }
+		            
+		            listA.add("<input type='text' name='" +"["+(rowindex-startRowindex)+"]"+"' value='"+value+"' >");
+		        }
+		        listA.add("</td><tr>");	
 		    }
 		}
 		System.out.println(listA);
 		model.addAttribute("listA",listA);
+		model.addAttribute("headerList", headerList);
+	    System.out.println("ì¶œë ¥í•´ë³´ì");
+		for(int i=0; i<mGroupList.size(); i++){
+			for(int j=0; j<mChildList.size(); j++){
+                System.out.print(mGroupList.get(i).get(j)+" ");	
+                if(mGroupList.get(i).get(j).equals("null")){
+//                	System.out.println(mGroupList.get(i).get(j));
+//                	System.out.println("ì•„ì´ëŠ”:"+i+" / ì œì´ëŠ”:"+j);
+//                	System.out.println("ì§„ì…" +i+","+j);
+//                	mGroupList.get(i).set(j, mGroupList.get(i+1).get(j));
+                }
+            }
+			System.out.println();
+        }
+		
 		return "index";
 	}
 	
-	@RequestMapping(value= "/testIndex", method=RequestMethod.POST)
-	public String testIndex(){
-		
-		return "testtest";
+	@RequestMapping(value= "/testIndex", method=RequestMethod.GET)
+	public String testIndex(Model model){
+		FileInputStream file = null;
+	    Boolean flag = true;
+	    String value="";
+	    ArrayList<String> array = new ArrayList<String>();
+	    ArrayList<String> rows = new ArrayList<String>();
+	    try {
+
+	        // here uploadFolder contains the path to the Login 3.xlsx file
+
+	        file = new FileInputStream("C:\\Spring\\workBook.xlsx");
+
+	        //Create Workbook instance holding reference to .xlsx file
+	        XSSFWorkbook workbook = new XSSFWorkbook(file);
+
+	        //Get first/desired sheet from the workbook
+	        XSSFSheet sheet = workbook.getSheetAt(0);
+
+	        //Iterate through each rows one by one
+	        Iterator<Row> rowIterator = sheet.iterator();
+		while (rowIterator.hasNext()) {
+	        Row row = rowIterator.next();
+
+	        //For each row, iterate through all the columns
+	        Iterator<Cell> cellIterator = row.cellIterator();
+
+	        outer:
+	        while (cellIterator.hasNext()) {
+	            Cell cell = cellIterator.next();
+
+	            //will iterate over the Merged cells
+	            for (int i = 0; i < sheet.getNumMergedRegions(); i++) {
+	                CellRangeAddress region = sheet.getMergedRegion(i); //Region of merged cells
+
+	                int colIndex = region.getFirstColumn(); //number of columns merged
+	                int rowNum = region.getFirstRow();      //number of rows merged
+	                //check first cell of the region
+	                if (rowNum == cell.getRowIndex() && colIndex == cell.getColumnIndex()) {
+	                    System.out.println(sheet.getRow(rowNum).getCell(colIndex).getStringCellValue());
+	                    value+=sheet.getRow(rowNum).getCell(colIndex).getStringCellValue();
+	                    array.add(value);
+	                    continue outer;
+	                }
+	            }
+	            //the data in merge cells is always present on the first cell. All other cells(in merged region) are considered blank
+	            if (cell.getCellType() == Cell.CELL_TYPE_BLANK || cell == null) {
+	                continue;
+	            }
+	            
+//	            System.out.println(cell.getStringCellValue());
+	            value+=cell.getStringCellValue();
+	            array.add(value);
+	        }
+	    }
+		}catch(Exception e){
+	    	
+	    }
+	    model.addAttribute("array",array);
+		return "testest";
 	}
 	
 	@RequestMapping(value= "/testtest", method=RequestMethod.POST)
@@ -102,35 +352,29 @@ public class testController {
 		int rowindex=0;
 		int columnindex=0;
 		List listA = new ArrayList();
-		//½ÃÆ® ¼ö (Ã¹¹øÂ°¿¡¸¸ Á¸ÀçÇÏ¹Ç·Î 0À» ÁØ´Ù)
-		//¸¸¾à °¢ ½ÃÆ®¸¦ ÀĞ±âÀ§ÇØ¼­´Â FOR¹®À» ÇÑ¹ø´õ µ¹·ÁÁØ´Ù
+		//ì‹œíŠ¸ ìˆ˜ (ì²«ë²ˆì§¸ì—ë§Œ ì¡´ì¬í•˜ë¯€ë¡œ 0ì„ ì¤€ë‹¤)
+		//ë§Œì•½ ê° ì‹œíŠ¸ë¥¼ ì½ê¸°ìœ„í•´ì„œëŠ” FORë¬¸ì„ í•œë²ˆë” ëŒë ¤ì¤€ë‹¤
 		XSSFSheet sheet=workbook.getSheetAt(0);
-		//ÇàÀÇ ¼ö
+		//í–‰ì˜ ìˆ˜
 		int rows=sheet.getPhysicalNumberOfRows();
 		for(rowindex=1;rowindex<rows;rowindex++){ 
-		    //ÇàÀ»ÀĞ´Â´Ù
-			System.out.println("·Î¿ì ¼ö"+rows);
+		    //í–‰ì„ì½ëŠ”ë‹¤
+			System.out.println("ë¡œìš° ìˆ˜"+rows);
 		    XSSFRow row=sheet.getRow(rowindex);
 		    if(row !=null){
-		        //¼¿ÀÇ ¼ö
+		        //ì…€ì˜ ìˆ˜
 		        int cells=row.getPhysicalNumberOfCells();
-		        System.out.println("¼¿¼ö:"+cells);
+		        System.out.println("ì…€ìˆ˜:"+cells);
 		        for(columnindex=0;columnindex<=cells;columnindex++){ // 16
-		        	if(rowindex==2 && columnindex==0){
-		        		listA.add("</tr><tr>");
-		        	}
-		        	if(rowindex==3 && columnindex==0){
-		        		listA.add("</tr><tr>");
-		        	}
-		            //¼¿°ªÀ» ÀĞ´Â´Ù
+		            //ì…€ê°’ì„ ì½ëŠ”ë‹¤
 		            XSSFCell cell=row.getCell(columnindex);
 		            String value="";
 		            
-		            //¼¿ÀÌ ºó°ªÀÏ°æ¿ì¸¦ À§ÇÑ ³ÎÃ¼Å©
+		            //ì…€ì´ ë¹ˆê°’ì¼ê²½ìš°ë¥¼ ìœ„í•œ ë„ì²´í¬
 		            if(cell==null){
 		                continue;
 		            }else{
-		                //Å¸ÀÔº°·Î ³»¿ë ÀĞ±â
+		                //íƒ€ì…ë³„ë¡œ ë‚´ìš© ì½ê¸°
 		                switch (cell.getCellType()){
 		                case XSSFCell.CELL_TYPE_FORMULA:
 		                    value=cell.getCellFormula();
@@ -154,12 +398,13 @@ public class testController {
 		            	cells = 0;
 		            	continue;
 		            }
-		            System.out.println("°¢ ¼¿ ³»¿ë :"+value);
+		            System.out.println("ê° ì…€ ë‚´ìš© :"+value);
 		            if(value.equals("")){
 		            	value = (String) listA.get(listA.size()-1);
 		            }
-		            listA.add(value);
-		        }
+		            listA.add(value+"???");
+	           	}
+		        listA.add("</td><tr><td>ì•„ë†” ã…¡ã…¡");
 		    }
 		}
 		

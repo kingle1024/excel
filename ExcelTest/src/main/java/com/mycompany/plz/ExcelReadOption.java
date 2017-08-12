@@ -5,17 +5,17 @@ import java.util.List;
 
 public class ExcelReadOption {
 	   /**
-     * ¿¢¼¿ÆÄÀÏÀÇ °æ·Î
+     * ì—‘ì…€íŒŒì¼ì˜ ê²½ë¡œ
      */
     private String filePath;
     
     /**
-     * ÃßÃâÇÒ ÄÃ·³ ¸í
+     * ì¶”ì¶œí•  ì»¬ëŸ¼ ëª…
      */
     private List<String> outputColumns;
     
     /**
-     * ÃßÃâÀ» ½ÃÀÛÇÒ Çà ¹øÈ£
+     * ì¶”ì¶œì„ ì‹œì‘í•  í–‰ ë²ˆí˜¸
      */
     private int startRow;
     

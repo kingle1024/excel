@@ -14,12 +14,12 @@ import org.apache.poi.ss.usermodel.Workbook;
 
 public class ExcelRead {
 	 public static List<Map<String, String>> read(ExcelReadOption excelReadOption) {
-         //¿¢¼¿ ÆÄÀÏ ÀÚÃ¼
-         //¿¢¼¿ÆÄÀÏÀ» ÀĞ¾î µéÀÎ´Ù.
-         //FileType.getWorkbook() <-- ÆÄÀÏÀÇ È®ÀåÀÚ¿¡ µû¶ó¼­ ÀûÀıÇÏ°Ô °¡Á®¿Â´Ù.
+         //ì—‘ì…€ íŒŒì¼ ìì²´
+         //ì—‘ì…€íŒŒì¼ì„ ì½ì–´ ë“¤ì¸ë‹¤.
+         //FileType.getWorkbook() <-- íŒŒì¼ì˜ í™•ì¥ìì— ë”°ë¼ì„œ ì ì ˆí•˜ê²Œ ê°€ì ¸ì˜¨ë‹¤.
          Workbook wb = ExcelFileType.getWorkbook(excelReadOption.getFilePath());
        
-         int sheetNum = wb.getNumberOfSheets(); //½ÃÆ®ÀÇ ¼ö¸¦ °¡Á®¿À±â À§ÇÑ º¯¼ö 
+         int sheetNum = wb.getNumberOfSheets(); //ì‹œíŠ¸ì˜ ìˆ˜ë¥¼ ê°€ì ¸ì˜¤ê¸° ìœ„í•œ ë³€ìˆ˜ 
          int numOfCells = 0;
          
          Row row = null;
@@ -28,78 +28,78 @@ public class ExcelRead {
          String cellName = "";
          
          /**
-          * °¢ row¸¶´ÙÀÇ °ªÀ» ÀúÀåÇÒ ¸Ê °´Ã¼
-          * ÀúÀåµÇ´Â Çü½ÄÀº ´ÙÀ½°ú °°´Ù.
-          * put("A", "ÀÌ¸§");
-          * put("B", "°ÔÀÓ¸í");
+          * ê° rowë§ˆë‹¤ì˜ ê°’ì„ ì €ì¥í•  ë§µ ê°ì²´
+          * ì €ì¥ë˜ëŠ” í˜•ì‹ì€ ë‹¤ìŒê³¼ ê°™ë‹¤.
+          * put("A", "ì´ë¦„");
+          * put("B", "ê²Œì„ëª…");
           */
          Map<String, String> map = null;
 
          /*
-          * °¢ Row¸¦ ¸®½ºÆ®¿¡ ´ã´Â´Ù.
-          * ÇÏ³ªÀÇ Row¸¦ ÇÏ³ªÀÇ MapÀ¸·Î Ç¥ÇöµÇ¸ç
-          * List¿¡´Â ¸ğµç Row°¡ Æ÷ÇÔµÉ °ÍÀÌ´Ù.
+          * ê° Rowë¥¼ ë¦¬ìŠ¤íŠ¸ì— ë‹´ëŠ”ë‹¤.
+          * í•˜ë‚˜ì˜ Rowë¥¼ í•˜ë‚˜ì˜ Mapìœ¼ë¡œ í‘œí˜„ë˜ë©°
+          * Listì—ëŠ” ëª¨ë“  Rowê°€ í¬í•¨ë  ê²ƒì´ë‹¤.
           */
          List<Map<String, String>> result = new ArrayList<Map<String, String>>(); 
          
          
-         //ÀÌºÎºĞÀÌ ¼öÁ¤µÇ¾ú´Ù.
+         //ì´ë¶€ë¶„ì´ ìˆ˜ì •ë˜ì—ˆë‹¤.
          for(int i =0; i<sheetNum; i++){
-             System.out.println("Sheet ÀÌ¸§: "+ wb.getSheetName(i));
+             System.out.println("Sheet ì´ë¦„: "+ wb.getSheetName(i));
              Sheet sheet = wb.getSheetAt(i);
          
-             int numOfRows = sheet.getPhysicalNumberOfRows(); //À¯È¿ÇÑ µ¥ÀÌÅÍ°¡ ÀÖ´Â ÇàÀÇ °³¼ö¸¦ °¡Á®¿Â´Ù.
+             int numOfRows = sheet.getPhysicalNumberOfRows(); //ìœ íš¨í•œ ë°ì´í„°ê°€ ìˆëŠ” í–‰ì˜ ê°œìˆ˜ë¥¼ ê°€ì ¸ì˜¨ë‹¤.
          
              /**
-              * °¢ Row¸¸Å­ ¹İº¹À» ÇÑ´Ù.
+              * ê° Rowë§Œí¼ ë°˜ë³µì„ í•œë‹¤.
               */
              for(int rowIndex = excelReadOption.getStartRow() - 1; rowIndex < numOfRows; rowIndex++) {
              
                  /*
-              * ¿öÅ©ºÏ¿¡¼­ °¡Á®¿Â ½ÃÆ®¿¡¼­ rowIndex¿¡ ÇØ´çÇÏ´Â Row¸¦ °¡Á®¿Â´Ù.
-              * ÇÏ³ªÀÇ Row´Â ¿©·¯°³ÀÇ CellÀ» °¡Áø´Ù.
+              * ì›Œí¬ë¶ì—ì„œ ê°€ì ¸ì˜¨ ì‹œíŠ¸ì—ì„œ rowIndexì— í•´ë‹¹í•˜ëŠ” Rowë¥¼ ê°€ì ¸ì˜¨ë‹¤.
+              * í•˜ë‚˜ì˜ RowëŠ” ì—¬ëŸ¬ê°œì˜ Cellì„ ê°€ì§„ë‹¤.
               */
              row = sheet.getRow(rowIndex);
              
              if(row != null) {
                  /*
-                  * °¡Á®¿Â RowÀÇ CellÀÇ °³¼ö¸¦ ±¸ÇÑ´Ù. 
+                  * ê°€ì ¸ì˜¨ Rowì˜ Cellì˜ ê°œìˆ˜ë¥¼ êµ¬í•œë‹¤. 
                   */
-                 numOfCells = row.getPhysicalNumberOfCells(); //ÇÑ°³ÀÇ Çà¸¶´Ù ¸î°³ÀÇ cellÀÌ ÀÖ´ÂÁö Ã¼Å© 
+                 numOfCells = row.getPhysicalNumberOfCells(); //í•œê°œì˜ í–‰ë§ˆë‹¤ ëª‡ê°œì˜ cellì´ ìˆëŠ”ì§€ ì²´í¬ 
                  
                  /*
-                  * µ¥ÀÌÅÍ¸¦ ´ãÀ» ¸Ê °´Ã¼ ÃÊ±âÈ­
+                  * ë°ì´í„°ë¥¼ ë‹´ì„ ë§µ ê°ì²´ ì´ˆê¸°í™”
                   */
                  map = new HashMap<String, String>();
                  
                  /*
-                  * cellÀÇ ¼ö ¸¸Å­ ¹İº¹ÇÑ´Ù.
+                  * cellì˜ ìˆ˜ ë§Œí¼ ë°˜ë³µí•œë‹¤.
                   */
                  for(int cellIndex = 0; cellIndex < numOfCells; cellIndex++) {
                      /*
-                      * Row¿¡¼­ CellIndex¿¡ ÇØ´çÇÏ´Â CellÀ» °¡Á®¿Â´Ù.
+                      * Rowì—ì„œ CellIndexì— í•´ë‹¹í•˜ëŠ” Cellì„ ê°€ì ¸ì˜¨ë‹¤.
                       */
                      cell = row.getCell(cellIndex);
                      /*
-                      * ÇöÀç CellÀÇ ÀÌ¸§À» °¡Á®¿Â´Ù
-                      * ÀÌ¸§ÀÇ ¿¹ : A,B,C,D,......
+                      * í˜„ì¬ Cellì˜ ì´ë¦„ì„ ê°€ì ¸ì˜¨ë‹¤
+                      * ì´ë¦„ì˜ ì˜ˆ : A,B,C,D,......
                       */
                      cellName = ExcelCellRef.getName(cell, cellIndex);
                      /*
-                      * ÃßÃâ ´ë»ó ÄÃ·³ÀÎÁö È®ÀÎÇÑ´Ù
-                      * ÃßÃâ ´ë»ó ÄÃ·³ÀÌ ¾Æ´Ï¶ó¸é, 
-                      * for·Î ´Ù½Ã ¿Ã¶ó°£´Ù
+                      * ì¶”ì¶œ ëŒ€ìƒ ì»¬ëŸ¼ì¸ì§€ í™•ì¸í•œë‹¤
+                      * ì¶”ì¶œ ëŒ€ìƒ ì»¬ëŸ¼ì´ ì•„ë‹ˆë¼ë©´, 
+                      * forë¡œ ë‹¤ì‹œ ì˜¬ë¼ê°„ë‹¤
                       */
                      if( !excelReadOption.getOutputColumns().contains(cellName) ) {
                          continue;
                      }
                      /*
-                      * map°´Ã¼ÀÇ CellÀÇ ÀÌ¸§À» Å°(Key)·Î µ¥ÀÌÅÍ¸¦ ´ã´Â´Ù.
+                      * mapê°ì²´ì˜ Cellì˜ ì´ë¦„ì„ í‚¤(Key)ë¡œ ë°ì´í„°ë¥¼ ë‹´ëŠ”ë‹¤.
                       */
                      map.put(cellName, ExcelCellRef.getValue(cell));
                  }
                  /*
-                  * ¸¸µé¾îÁø Map°´Ã¼¸¦ List·Î ³Ö´Â´Ù.
+                  * ë§Œë“¤ì–´ì§„ Mapê°ì²´ë¥¼ Listë¡œ ë„£ëŠ”ë‹¤.
                   */
                  result.add(map);   
              }

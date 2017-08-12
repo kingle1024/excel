@@ -14,7 +14,7 @@ public class BoardController {
         
         MultipartFile excelFile = request.getFile("excelFile");
         if(excelFile==null || excelFile.isEmpty()){
-            throw new RuntimeException("¿¢¼¿ÆÄÀÏÀ» ¼±ÅÃÇØ ÁÖ¼¼¿ä");
+            throw new RuntimeException("ì—‘ì…€íŒŒì¼ì„ ì„ íƒí•´ ì£¼ì„¸ìš”");
         }
  
         File destFile = new File("D:\\"+excelFile.getOriginalFilename());

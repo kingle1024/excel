@@ -1,5 +1,4 @@
-<%@ page language="java" contentType="text/html; charset=EUC-KR"
-	pageEncoding="EUC-KR"%>
+<%@ page pageEncoding="utf-8" session="false" %>
 	<%@ taglib uri="http://java.sun.com/jsp/jstl/core" prefix="c"%>
 <!DOCTYPE html PUBLIC "-//W3C//DTD HTML 4.01 Transitional//EN" "http://www.w3.org/TR/html4/loose.dtd">
 <html>
@@ -11,9 +10,9 @@
 <script src="http://code.jquery.com/jquery-latest.min.js"></script>
 <!-- 
 http://sararing.tistory.com/120
--> µ¥ÀÌÅÍ¸¦ ¾Èº¸³»°í ÆäÀÌÁö °¬´Ù ¿Ã ¼ø ¾ø³ª??
+-> ë°ì´í„°ë¥¼ ì•ˆë³´ë‚´ê³  í˜ì´ì§€ ê°”ë‹¤ ì˜¬ ìˆœ ì—†ë‚˜??
 
-ajax json ¹Ş¾Æ¿À±â
+ajax json ë°›ì•„ì˜¤ê¸°
  -->
 <script>
 // var checkList = [];
@@ -27,13 +26,13 @@ ajax json ¹Ş¾Æ¿À±â
 // 		//loading.hide();
 // 	},
 // 	success:function(data){
-// 		//¸®½ºÆ® ¾Æ·¡ ºÙÀÏ HTML
+// 		//ë¦¬ìŠ¤íŠ¸ ì•„ë˜ ë¶™ì¼ HTML
 // 		if(data.length==0)
-// 			alert('°á°ú°¡ ¾ø½À´Ï´Ù');
+// 			alert('ê²°ê³¼ê°€ ì—†ìŠµë‹ˆë‹¤');
 // 		else{
 // 			checkList = data;
-// 			console.log(data); // ·Î±× Âï±â
-// 			console.log(checkList); // ·Î±× Âï±â
+// 			console.log(data); // ë¡œê·¸ ì°ê¸°
+// 			console.log(checkList); // ë¡œê·¸ ì°ê¸°
 // 		}
 // 	}
 // });
@@ -42,26 +41,31 @@ ajax json ¹Ş¾Æ¿À±â
 <body>
 	<table border="1" id="table">
 		<tr>
+			<c:forEach var="headerList" items="${headerList }">
+				<td>${headerList }</td>
+			</c:forEach>
+		</tr>
+		<tr>
 			<c:forEach var="obj" items="${listA}">
 				<td>${obj }</td>
 			</c:forEach>
 		</tr>
 	</table>
-	<input type="button" id="searchButton" value="´­·¯º¸¼î">
-	<input type="button" id="searchButton1" value="´©¸£½Ã¿À">
+	<input type="button" id="searchButton" value="ëˆŒëŸ¬ë³´ì‡¼">
+	<input type="button" id="searchButton1" value="ëˆ„ë¥´ì‹œì˜¤">
 <script>
 $("#searchButton").click(function(){
-	var values = []; //ArrayList °ªÀ» ¹ŞÀ» º¯¼ö¸¦ ¼±¾ğ
+	var values = []; //ArrayList ê°’ì„ ë°›ì„ ë³€ìˆ˜ë¥¼ ì„ ì–¸
 	 $.post(
-		"showJsonData", // ½ÇÇà url
+		"showJsonData", // ì‹¤í–‰ url
 	     function(jsonObject) {
-			console.log(jsonObject); // ·Î±× Âï±â	
+			console.log(jsonObject); // ë¡œê·¸ ì°ê¸°	
 	    	var innerHTML =""; 
-			alert("½ÇÇàµÌ½´");
+			alert("ì‹¤í–‰ë«ìŠˆ");
 			values = jsonObject.result_list;
 			innerHTML +="<div class='container'>";
-			innerHTML +="<table class='table table-striped'><tr><td>¹øÈ£</td><td>Á¦¸ñ</td><td>arr</td>";
-			$.each(values, function( index, value){ // Ãâ·Â		
+			innerHTML +="<table class='table table-striped'><tr><td>ë²ˆí˜¸</td><td>ì œëª©</td><td>arr</td>";
+			$.each(values, function( index, value){ // ì¶œë ¥		
 				innerHTML +="<tr>";
 				innerHTML +="<td><input type='text' value='"+value.idx+"'></td>";
 				innerHTML +="<td><input type='text' value='"+value.title+"'></td>";
@@ -70,18 +74,18 @@ $("#searchButton").click(function(){
 			});
 			innerHTML +="</table>";
 			innerHTML +="</div>";
-			$('#come').append(innerHTML); // È­¸é¿¡ Ç¥½Ã
+			$('#come').append(innerHTML); // í™”ë©´ì— í‘œì‹œ
         }
     );
 });
 </script>
 <script>
 $("#searchButton1").click(function(){
-	var values = []; //ArrayList °ªÀ» ¹ŞÀ» º¯¼ö¸¦ ¼±¾ğ
+	var values = []; //ArrayList ê°’ì„ ë°›ì„ ë³€ìˆ˜ë¥¼ ì„ ì–¸
 	 $.post(
-		"showJsonData1", // ½ÇÇà url
+		"showJsonData1", // ì‹¤í–‰ url
 	     function(jsonObject) {
-			console.log(jsonObject); // ·Î±× Âï±â	
+			console.log(jsonObject); // ë¡œê·¸ ì°ê¸°	
 			
 	    	var innerHTML =""; 
 			values = jsonObject;
@@ -92,16 +96,16 @@ $("#searchButton1").click(function(){
 			"<table class='table table-striped'>"+
 			"<thead>"+
 				"<tr>"+
-					"<th width='100px'>»ç¹ø<br>(µî·Ï¹øÈ£)</th>"+
-					"<th width='100px'>Á÷À§</th>"+
-					"<th>ÀÌ¸§</th>"+
-					"<th width='100px'>³ª´®Æ÷ÀÎÆ®</th>"+
-					"<th width='100px'>±³À° Âü¿©µµ</th>"+
+					"<th width='100px'>ì‚¬ë²ˆ<br>(ë“±ë¡ë²ˆí˜¸)</th>"+
+					"<th width='100px'>ì§ìœ„</th>"+
+					"<th>ì´ë¦„</th>"+
+					"<th width='100px'>ë‚˜ëˆ”í¬ì¸íŠ¸</th>"+
+					"<th width='100px'>êµìœ¡ ì°¸ì—¬ë„</th>"+
 					"<th width='130px'>checkbox</th>"+
 				"</tr>"+
 			"</thead>";
 			
-			$.each(values, function(index, value){ // Ãâ·Â
+			$.each(values, function(index, value){ // ì¶œë ¥
 // 				alert(index);
 				innerHTML +="<tbody>";
 				innerHTML +="<tr>";
@@ -117,17 +121,17 @@ $("#searchButton1").click(function(){
 			});
 			innerHTML +="</tbody>";
 			innerHTML +="</table>";
-			innerHTML +="<input type='submit' class='btn btn-primary' value='Á¦ÃâÇÏ±â' onclick=''>";
+			innerHTML +="<input type='submit' class='btn btn-primary' value='ì œì¶œí•˜ê¸°' onclick=''>";
 			innerHTML +="</form>";
 			innerHTML +="</div'>";
-			$('#come1').append(innerHTML); // È­¸é¿¡ Ç¥½Ã
+			$('#come1').append(innerHTML); // í™”ë©´ì— í‘œì‹œ
         }
     );
 });
 </script>
 <script type="text/javascript">
     function add_item(obj){
-        // pre_set ¿¡ ÀÖ´Â ³»¿ëÀ» ÀĞ¾î¿Í¼­ Ã³¸®..
+        // pre_set ì— ìˆëŠ” ë‚´ìš©ì„ ì½ì–´ì™€ì„œ ì²˜ë¦¬..
         var div = document.createElement('div');
 //         div.innerHTML = document.getElementById('pre_set').innerHTML;
 //         document.getElementById('field').appendChild(div);
@@ -136,9 +140,9 @@ $("#searchButton1").click(function(){
         document.getElementById("pre_set").style = "display:hidden";
     }
     function remove_item(obj){
-        // obj.parentNode ¸¦ ÀÌ¿ëÇÏ¿© »èÁ¦
+        // obj.parentNode ë¥¼ ì´ìš©í•˜ì—¬ ì‚­ì œ
 //         document.getElementById('field').removeChild(obj.parentNode);
-        // display:noneÀ¸·Î º¯°æ
+        // display:noneìœ¼ë¡œ ë³€ê²½
     	document.getElementById("dummy").style = "display:hidden";
     	document.getElementById("pre_set").style = "display:none";
     }
@@ -149,7 +153,7 @@ $("#searchButton1").click(function(){
 	<div id="come"></div>
 	<div id="come1"></div>
 	<div id="pre_set" style="display:none">
-    	<input type="text" name="" value="" style="width:200px"> <input type="button" value="µî·Ï" onclick="remove_item(this)">
+    	<input type="text" name="" value="" style="width:200px"> <input type="button" value="ë“±ë¡" onclick="remove_item(this)">
 	</div>
  
 
@@ -183,16 +187,16 @@ $("#searchButton1").click(function(){
     <form id="excelUploadForm" name="excelUploadForm" enctype="multipart/form-data" method="post" 
                                 action= "${pageContext.request.contextPath}/user/excelUploadAjax">
     <div class="contents">
-        <div>Ã·ºÎÆÄÀÏÀº ÇÑ°³¸¸ µî·Ï °¡´ÉÇÕ´Ï´Ù.</div>
+        <div>ì²¨ë¶€íŒŒì¼ì€ í•œê°œë§Œ ë“±ë¡ ê°€ëŠ¥í•©ë‹ˆë‹¤.</div>
  
         <dl class="vm_name">
-                <dt class="down w90">Ã·ºÎ ÆÄÀÏ</dt>
+                <dt class="down w90">ì²¨ë¶€ íŒŒì¼</dt>
                 <dd><input id="excelFile" type="file" name="excelFile" /></dd>
         </dl>        
     </div>
             
     <div class="bottom">
-        <button type="button" id="addExcelImpoartBtn" class="btn" onclick="check()" ><span>Ãß°¡</span></button> 
+        <button type="button" id="addExcelImpoartBtn" class="btn" onclick="check()" ><span>ì¶”ê°€</span></button> 
     </div>
 </form> 
 <script>
@@ -209,17 +213,17 @@ function checkFileType(filePath) {
 function check() {
     var file = $("#excelFile").val();
     if (file == "" || file == null) {
-        alert("ÆÄÀÏÀ» ¼±ÅÃÇØÁÖ¼¼¿ä.");
+        alert("íŒŒì¼ì„ ì„ íƒí•´ì£¼ì„¸ìš”.");
         return false;
     } else if (!checkFileType(file)) {
-        alert("¿¢¼¿ ÆÄÀÏ¸¸ ¾÷·Îµå °¡´ÉÇÕ´Ï´Ù.");
+        alert("ì—‘ì…€ íŒŒì¼ë§Œ ì—…ë¡œë“œ ê°€ëŠ¥í•©ë‹ˆë‹¤.");
         return false;
     }
 
-    if (confirm("¾÷·Îµå ÇÏ½Ã°Ú½À´Ï±î?")) {
+    if (confirm("ì—…ë¡œë“œ í•˜ì‹œê² ìŠµë‹ˆê¹Œ?")) {
         var options = {
             success : function(data) {
-                alert("¸ğµç µ¥ÀÌÅÍ°¡ ¾÷·Îµå µÇ¾ú½À´Ï´Ù.");
+                alert("ëª¨ë“  ë°ì´í„°ê°€ ì—…ë¡œë“œ ë˜ì—ˆìŠµë‹ˆë‹¤.");
             },
             type : "POST"
         };

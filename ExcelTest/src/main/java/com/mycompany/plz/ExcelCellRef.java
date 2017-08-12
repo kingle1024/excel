@@ -7,9 +7,9 @@ import org.apache.poi.ss.util.CellReference;
 
 public class ExcelCellRef {
 	/**
-     * Cell¿¡ ÇØ´çÇÏ´Â Column NameÀ» °¡Á¯¿Â´Ù(A,B,C..)
-     * ¸¸¾à CellÀÌ NullÀÌ¶ó¸é int cellIndexÀÇ °ªÀ¸·Î
-     * Column NameÀ» °¡Á®¿Â´Ù.
+     * Cellì— í•´ë‹¹í•˜ëŠ” Column Nameì„ ê°€ì ¼ì˜¨ë‹¤(A,B,C..)
+     * ë§Œì•½ Cellì´ Nullì´ë¼ë©´ int cellIndexì˜ ê°’ìœ¼ë¡œ
+     * Column Nameì„ ê°€ì ¸ì˜¨ë‹¤.
      * @param cell
      * @param cellIndex
      * @return
