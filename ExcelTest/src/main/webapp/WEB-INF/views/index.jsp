@@ -5,54 +5,112 @@
 <head>
 <c:url var="bootstrap" value="/resources/css/bootstrap.min.css" />
 <link href="${ bootstrap }" rel="stylesheet">
-<meta http-equiv="Content-Type" content="text/html; charset=EUC-KR">
-<title>Insert title here</title>
+<title>엑셀 업로드 미리보기</title>
 <script src="http://code.jquery.com/jquery-latest.min.js"></script>
 <!-- 
 http://sararing.tistory.com/120
 -> 데이터를 안보내고 페이지 갔다 올 순 없나??
-
 ajax json 받아오기
  -->
+ <script>
+$(document).ready(function(){
+	$("#ReadingInfoSelectBtn").click(function(){
+		var formData = $("#formname1").serialize();
+		$.ajax({
+			type : "POST",
+			url : "${pageContext.request.contextPath}/uploadTest",
+			cache : false,
+			data : formData,
+			success : function(json, status){
+				alert('성공 했습니다');
+			},
+			error : function(request,status,error){
+				alert("code:"+request.status+"\n"+"message:"+request.responseText+"\n"+"error:"+error);
+			}
+		});
+	});
+});
+</script>
 <script>
-// var checkList = [];
-// $.ajax({
-// 	type:"post",
-// 	url:"getJsonByMap", 
-// 	dataType:'json',
-// 	data:checkList,
-// 	error:function(){
-// 		alert("ERROR::");
-// 		//loading.hide();
-// 	},
-// 	success:function(data){
-// 		//리스트 아래 붙일 HTML
-// 		if(data.length==0)
-// 			alert('결과가 없습니다');
-// 		else{
-// 			checkList = data;
-// 			console.log(data); // 로그 찍기
-// 			console.log(checkList); // 로그 찍기
-// 		}
-// 	}
-// });
+$.fn.rowspan = function(colIdx, isStats) {       
+    return this.each(function(){      
+        var that;     
+        $('tr', this).each(function(row) {      
+            $('td:eq('+colIdx+')', this).filter(':visible').each(function(col) {
+                if ($(this).html() == $(that).html() && (!isStats || isStats && $(this).prev().html() == $(that).prev().html()) ) {            
+                    rowspan = $(that).attr("rowspan") || 1;
+                    rowspan = Number(rowspan)+1;
+                    $(that).attr("rowspan",rowspan);
+                    // do your action for the colspan cell here            
+                    $(this).hide();
+                    //$(this).remove(); 
+                    // do your action for the old cell here
+                } else {            
+                    that = this;         
+                }          
+                // set the that if not already set
+                that = (that == null) ? this : that;      
+            });     
+        });    
+    });  
+}; 
+$.fn.colspan = function(rowIdx) {  
+    return this.each(function(){  
+    	var that;  
+    	$('tr', this).filter(":eq("+rowIdx+")").each(function(row) { 
+    		$(this).find('td').filter(':visible').each(function(col) {
+    			if( $(this).html() == $(that).html() ) {   //
+    				colspan = $(that).attr("colSpan");
+    				if(colspan == undefined){
+   						$(that).attr("colSpan",1);  
+   						colspan = $(that).attr("colSpan");
+    				}  
+    				colspan = Number(colspan)+1;  
+    				$(that).attr("colSpan",colspan);  
+    				$(this).hide(); // .remove();
+    			}else{  
+    				that = this; // 같은 이름의 값을 합쳐준다(비어있지 않은 값)
+    			}  
+    			that = (that == null) ? this : that; // set the that if not already set
+			});  
+    	});  
+ });  
+} 
 </script>
 </head>
 <body>
-	<table border="1" id="table">
+<form name="formname1" method="post">
+	<table border="1" id="table" >
+		<c:forEach var="headerList" items="${testList }">
 		<tr>
-			<c:forEach var="headerList" items="${headerList }">
-				<td>${headerList }</td>
+			<c:forEach var="listL" items="${headerList }">
+				<td width="100px">${listL }</td>
 			</c:forEach>
 		</tr>
+		</c:forEach>
 		<tr>
 			<c:forEach var="obj" items="${listA}">
-				<td>${obj }</td>
+				<td width="100px"> ${ obj } </td>
 			</c:forEach>
 		</tr>
 	</table>
+	<input type="hidden" value="test" name="test">
+	<input type="button"  id="ReadingInfoSelectBtn" value="제출">
+</form>
+
 	<input type="button" id="searchButton" value="눌러보쇼">
 	<input type="button" id="searchButton1" value="누르시오">
+<script type="text/javascript">  
+	$(document).ready(function() {  
+	/*
+		아래 주석처리된 것을 사용하면 헤더를 그릴 수 있음(근데 테이블을 두개로 가져가야 함. 왜냐하면 하나로 가져가면 밑에 값들도 통합이 되버려서)		
+	*/
+// 		$('table tbody tr:visible').each(function(row) {  
+// 			$('#table').colspan(row);
+// 			$('#table').rowspan(row);
+// 		})  
+	});  
+</script>
 <script>
 $("#searchButton").click(function(){
 	var values = []; //ArrayList 값을 받을 변수를 선언
@@ -106,16 +164,10 @@ $("#searchButton1").click(function(){
 			"</thead>";
 			
 			$.each(values, function(index, value){ // 출력
-// 				alert(index);
 				innerHTML +="<tbody>";
 				innerHTML +="<tr>";
 					$.each(value, function(indexx, valuee){
 						innerHTML +="<td>"+valuee+"</td>";
-						
-						//if(valuee.)
-						/*
-						
-						*/
 					})				
 				innerHTML +="</tr>";
 			});
@@ -148,18 +200,13 @@ $("#searchButton1").click(function(){
     }
 
 </script>
-
 	<br><br><br>
 	<div id="come"></div>
 	<div id="come1"></div>
 	<div id="pre_set" style="display:none">
     	<input type="text" name="" value="" style="width:200px"> <input type="button" value="등록" onclick="remove_item(this)">
 	</div>
- 
-
-	
 	<br><br><br>
-
     <script>
     $(document).ready(function() {
         $('#submitBtn').click(function() {
@@ -207,7 +254,6 @@ function checkFileType(filePath) {
     } else {
         return false;
     }
-
 }
 
 function check() {
@@ -236,5 +282,6 @@ function check() {
     <input type="file" name="fileUpload" id="fileUpload">
 </form>
     
+
 </body>
 </html>
